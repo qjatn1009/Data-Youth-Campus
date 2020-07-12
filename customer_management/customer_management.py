@@ -1,17 +1,17 @@
-from module.select_menu import input_info
-from module.select_menu import modify_cust
-from module.select_menu import search_cust
-from module.select_menu import current_cust
-from module.select_menu import previous_cust
-from module.select_menu import next_cust
-from module.select_menu import all_cust
-from module.select_menu import delete_cust
-from module.print_info import print_menu
-from module.cust_data import saveData
-from module.cust_data import loadData
+from select_menu import input_info
+from select_menu import modify_cust
+from select_menu import search_cust
+from select_menu import current_cust
+from select_menu import previous_cust
+from select_menu import next_cust
+from select_menu import all_cust
+from select_menu import delete_cust
+from print_info import print_menu
+from cust_data import saveData
+from cust_data import loadData
 
-class customer_management:
-    main(self):
+class customer_mangement:
+    def main(self):
         information = []
         current, information=loadData(information)
         while True:
@@ -56,5 +56,5 @@ class customer_management:
                 break
 
 if __name__ =="__main__":
-    customer_manager = customer_management()
-    customer_manager.main()
+    customer = customer_mangement()
+    customer.main()

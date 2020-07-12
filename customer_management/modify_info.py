@@ -1,4 +1,4 @@
-import module.Customer as cust
+import Customer as cust
 
 def all_modify(): #정보 전체 수정
     # personal = {"name":"" , "gender":"" , "Email":"" , "birthday":0}

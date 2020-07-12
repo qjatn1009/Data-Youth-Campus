@@ -1,5 +1,5 @@
-from module.print_info import cust_print
-from module.modify_info import all_modify
+from print_info import cust_print
+from modify_info import all_modify
 
 def input_info(information, current): #정보 입력
     
