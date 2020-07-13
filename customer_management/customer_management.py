@@ -1,58 +1,51 @@
-from select_menu import input_info
-from select_menu import modify_cust
-from select_menu import search_cust
-from select_menu import current_cust
-from select_menu import previous_cust
-from select_menu import next_cust
-from select_menu import all_cust
-from select_menu import delete_cust
-from print_info import print_menu
-from cust_data import saveData
-from cust_data import loadData
+import CustomerConsole as cc
+import customerList as cl
 
 class customer_mangement:
+       
+
     def main(self):
-        information = []
-        current, information=loadData(information)
+        lists = cc.CustomerConsole()
+        lists.loadData()
         while True:
 
-            menu = print_menu()
+            menu = lists.print_menu()
 
             if menu == "I":
                 
-                current = input_info(information, current)
+                lists.input_info()
                 
             elif menu == "S":
 
-                current = search_cust(information, current)
+                lists.search_cust()
 
             elif menu == "C":
                 
-                current_cust(information, current)
+                lists.current_cust()
 
             elif menu == "P":
                 
-                current = previous_cust(information, current)
+                lists.previous_cust()
 
             elif menu == "N":
                 
-                current = next_cust(information, current)
+                lists.next_cust()
 
             elif menu == "U":
 
-                modify_cust(information, current)
+                lists.modify_cust()
                 
             elif menu =="A":
                 
-                all_cust(information)
+                lists.all_cust()
 
             elif menu == "D":
 
-                current = delete_cust(information, current)
+                lists.delete_cust()
 
             elif menu == "Q":
-                print("프로그램을 종료합니다.")
-                saveData(information)
+                lists.end()
+                lists.saveData()
                 break
 
 if __name__ =="__main__":
