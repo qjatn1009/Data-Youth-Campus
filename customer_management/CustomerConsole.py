@@ -137,14 +137,14 @@ class CustomerConsole:
         print("프로그램을 종료합니다.")
         
     def saveData(self):# 정보 저장
-        with open('./customer/data/cust_data.pkl', 'wb') as f:
+        with open('./data/cust_data.pkl', 'wb') as f:
             print(self.__list.get_list())
             pickle.dump(self.__list.get_list(), f)
             print("정상적으로 저장되었습니다.")
 
     def loadData(self):# 정보 불러오기
-        if os.path.exists("./customer/data/cust_data.pkl"):
-            with open('./customer/data/cust_data.pkl', 'rb') as f:
+        if os.path.exists("./data/cust_data.pkl"):
+            with open('./data/cust_data.pkl', 'rb') as f:
                 self.__list.set_list(pickle.load(f))
                 if len(self.__list.get_list())!=0: 
                     self.__list.set_current(len(self.__list.get_list())-1)
