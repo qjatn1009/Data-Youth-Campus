@@ -6,8 +6,6 @@ import sqlalchemy as db
 from sqlalchemy.sql import text
 import cx_Oracle
 
-
-
 class CustomerConsole:
     def __init__(self):
         self.__list = cl.customerList()
