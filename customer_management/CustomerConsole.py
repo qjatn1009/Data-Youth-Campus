@@ -2,6 +2,11 @@ import customerList as cl
 import Customer as cust
 import os
 import pickle
+import sqlalchemy as db
+from sqlalchemy.sql import text
+import cx_Oracle
+
+
 
 class CustomerConsole:
     def __init__(self):
@@ -142,13 +147,14 @@ class CustomerConsole:
             pickle.dump(self.__list.get_list(), f)
             print("정상적으로 저장되었습니다.")
 
-    def loadData(self):# 정보 불러오기
-        if os.path.exists("./data/cust_data.pkl"):
-            with open('./data/cust_data.pkl', 'rb') as f:
-                self.__list.set_list(pickle.load(f))
-                if len(self.__list.get_list())!=0: 
-                    self.__list.set_current(len(self.__list.get_list())-1)
-                else:
-                    self.__list.set_current(-1)
-        else:
-            self.__list.set_current(-1)
+    def loadData(self): # 정보 불러오기
+        engine = db.create_engine("oracle://hr:hr@oraxe11g/xe")
+        with engine.connect() as connection:
+            result = connection.execute("select * from cust")
+            cust_list = [dic(row) for row in result]
+            self.__list.set_list(cust_list)
+    
+    def saveData(self): # 정보 저장
+        engine = db.create_engine("oracle://hr:hr@oraxe11g/xe")
+        with engine.connect() as connection:
+            

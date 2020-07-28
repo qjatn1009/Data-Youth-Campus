@@ -1,0 +1,18 @@
+{% extends '__base.html' %}
+{% block title %} Search Student{% endblock %}
+{% block content %}
+        <h1>Search Student</h1>
+        {% if keyword_list %}
+        <ol class="list-group">
+            {% for s in keyword_list %}
+            <li class="list-group-item">
+                {{ s.title }} {{ s.URL }} {{ s.summary }}
+            </li>
+            {% endfor %}
+        </ol>
+    {% endif %}
+    <hr>
+    <a href="{% url 'main' %}" class="btn btn-outline-dark">
+        뒤로가기
+    </a>
+{% endblock %}
