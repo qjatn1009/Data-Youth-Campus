@@ -1,0 +1,108 @@
+{% extends '__base.html' %}
+{% block title %} Register Student{% endblock %}
+{% block content %}
+    <h1>Register Student</h1>
+    <form action="{% url 'register' %}" method="post"> <!-- 서버에 값을 보내기 위한 곳 action : 서버주소적는 곳 -->
+        {% csrf_token %}
+        Name : <input id= "name" type ="text" name="name"> <br>
+        Major : <input type ="text" name="major"> <br>
+        Age : <input type = "text" name="age"> <br>
+        Grade : <input type = "text" name="grade"> <br>
+        Gender : <input type = "text" name="gender"> <br>
+            <input onclick="testclick()" type="button" name="등록" value="등록"><br> <!-- submit이 전송 버튼으로 할경우에는 js로 전송해야됨-->
+            <input type="button" name="reg" value="누르기">
+    </form>
+    <hr>
+    <div class="btn-group" role="group" aria-label="Basic example" >
+        <a href="{% url 'search' %}" class="btn btn-outline-primary">목록</a>
+    </div>
+    {% endblock %}
+    {% block script %}
+    <script>
+        $ ( document ).ready(function(){
+            console.log( "ready!");
+            $('#name').val("test");
+        });
+        // 둘다 같은 함수지만 위에는 html에 함수를 적지 않음
+
+        $('input[name=reg]').click(function(){   
+            flag = true; 
+            if( 0 == $('input[name=name]').val().length){
+                flag = false;
+                alert("이름을 입력하세요.");
+            }
+            else{
+                if( 0 == $('input[name=major]').val().length){
+                    flag = false;
+                    alert("전공을 입력하세요.");
+                }
+                else{
+                    if( 0 == $('input[name=age]').val().length){
+                       flag = false;
+                      alert("나이를 입력하세요.")
+                    }
+                    else{
+                        if( 0 == $('input[name=grade]').val().length){
+                            flag = false;
+                            alert("학년을 입력하세요.")
+                        }
+                        else{
+                            if( 0 == $('input[name=gender]').val().length){
+                                flag = false;
+                                alert("성별을 입력하세요.")
+                            }
+                            else{
+                                alert("등록을 완료하였습니다.")
+                                $('form').submit();
+                            }
+                        }
+                    }
+                }
+            }
+
+        });
+        
+        function testclick(){ //값이 있나 없나 확인
+            // if (0 < $('#name').val().length){
+            //     // $('form').submit();
+            //     alert("submit");    
+            // };
+            flag = true; 
+            if( 0 == $('input[name=name]').val().length){
+                flag = false;
+                alert("이름을 입력하세요.");
+            }
+            else{
+                if( 0 == $('input[name=major]').val().length){
+                    flag = false;
+                    alert("전공을 입력하세요.");
+                }
+                else{
+                    if( 0 == $('input[name=age]').val().length){
+                       flag = false;
+                      alert("나이를 입력하세요.")
+                    }
+                    else{
+                        if( 0 == $('input[name=grade]').val().length){
+                            flag = false;
+                            alert("학년을 입력하세요.")
+                        }
+                        else{
+                            if( 0 == $('input[name=gender]').val().length){
+                                flag = false;
+                                alert("성별을 입력하세요.")
+                            }
+                            else{
+                                alert("등록을 완료하였습니다.")
+                                $('form').submit();
+                            }
+                        }
+                    }
+                }
+            }
+            // if (flag){
+
+            // } 
+        }
+    </script>
+    {% endblock %}

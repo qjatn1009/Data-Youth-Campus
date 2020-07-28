@@ -1,0 +1,18 @@
+{% extends '__base.html' %}
+{% block title %} Modify Student{% endblock %}
+{% block content %}
+    <h1>Modify Student</h1>
+    <form action="{% url 'modify' %}" method="post"> <!-- 서버에 값을 보내기 위한 곳 action : 서버주소적는 곳 -->
+        {% csrf_token %}
+        Name : <input readonly type ="text" name="name" value={{student_info.s_name}}> <br>
+        Major : <input type ="text" name="major" value="{{student_info.s_major}}"> <br>
+        Age : <input type = "text" name="age" value="{{student_info.s_age}}"> <br>
+        Grade : <input type = "text" name="grade" value="{{student_info.s_grade}}"> <br>
+        Gender : <input type = "text" name="gender" value="{{student_info.s_gender}}"> <br>
+            <input type="submit" name="수정" value="수정"><br> <!-- submit이 전송 버튼으로 할경우에는 js로 전송해야됨-->
+    </form>
+    <hr>
+    <div class="btn-group" role="group" aria-label="Basic example" >
+        <a href="{% url 'search' %}" class="btn btn-outline-primary">목록</a>
+    </div>
+    {% endblock %}
