@@ -1,0 +1,38 @@
+{% extends '__base.html' %}
+{% block title %} Detail Student{% endblock %}
+{% block content %}
+    <h1>Detail Student</h1>
+    {% if student_info %}
+    <table border="1" width="300" >
+        <td colspan="2" align="center">Student Detail</td>
+        <tr>
+            <td class ="detail">Name</td>
+            <td>{{student_info.s_name}}</td>
+        </tr>
+        <tr>
+            <td class ="detail">Major</td>
+            <td>{{student_info.s_major}}</td>
+        </tr>
+        <tr>
+            <td class ="detail">Age</td>
+            <td>{{student_info.s_age}}</td>
+        </tr>
+        <tr>
+            <td class ="detail">Grade</td>
+            <td>{{student_info.s_grade}}</td>
+        </tr>
+        <tr>
+            <td class ="detail">Gender</td>
+            <td>{{student_info.s_gender}}</td>
+        </tr>
+    </table>
+    {% else %}
+        <p>Student : 0</p>
+    {% endif %}
+    <br>
+    <div class="btn-group" role="group" aria-label="Basic example" >
+        <a href="{% url 'search' %}" class="btn btn-outline-primary">목록</a>
+        <a href="{% url 'modiform' student_info.s_name%}" class="btn btn-outline-primary">수정</a>
+        <a href="{% url 'delete' student_info.s_name%}" class="btn btn-outline-primary">삭제</a>
+    </div>
+    {% endblock %}

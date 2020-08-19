@@ -1,0 +1,26 @@
+{% extends '__base.html' %}
+{% block title %} Search Student{% endblock %}
+{% block content %}
+        <h1>Search Student</h1>
+        {% if student_list %}
+        <ol class="list-group">
+            {% for s in student_list %}
+            <li class="list-group-item">
+                    <a href="{% url 'detail' s.s_name%}" class="btn btn-outline-dark" > <!-- 링크거는 방법, detail->urls의 name과 같아야됨-->
+                        {{s.s_name}}
+                    </a>
+                    <a href="{% url 'modiform' s.s_name %}" class="btn btn-outline-dark">
+                        수정
+                    </a>
+                    <a href="{% url 'delete' s.s_name %}" class="btn btn-outline-dark">
+                        삭제
+                    </a>
+            </li>
+            {% endfor %}
+        </ol>
+    {% endif %}
+    <hr>
+    <a href="{% url 'regform' %}" class="btn btn-outline-dark">
+        등록
+    </a>
+{% endblock %}
