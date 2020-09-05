@@ -5,40 +5,42 @@ from bs4 import BeautifulSoup
 import re
 import pandas as pd
 import pickle
+import openpyxl
 
-driver = webdriver.Chrome('C:\WebDriver\chromedriver.exe')
-driver.get('https://www.instagram.com/explore/tags/서울맛집/')
-time.sleep(3)
+def read_File(filename):
+    wb = openpyxl.load_workbook(filename)
+    df1 = pd.read_excel(filename, sheet_name = 0)
+    for i in range(len(df1)):
+        name = df1["이름"][i].replace(" ", "")
+        location_name.append(name)
 
-login = driver.find_element_by_class_name('sqdOP.L3NKy.y3zKF')
-login.click()
-time.sleep(2)
+def instagramLogin(driver):
 
-facebook_login = driver.find_element_by_class_name('KPnG0')
-facebook_login.click()
-time.sleep(2)
+    facebook_login = driver.find_element_by_class_name('KPnG0')
+    facebook_login.click()
+    time.sleep(1)
 
-userid = driver.find_element_by_id('email')
-userid.send_keys('maxha97@naver.com')
-time.sleep(2)
+    userid = driver.find_element_by_id('email')
+    userid.send_keys('maxha97@naver.com')
+    time.sleep(1)
 
-password = driver.find_element_by_id('pass') 
-password.send_keys('Ggmlnh')
-time.sleep(2)
+    password = driver.find_element_by_id('pass') 
+    password.send_keys('Ggmlnh')
+    time.sleep(1)
 
-login_button = driver.find_element_by_id('loginbutton')
-login_button.click()
-time.sleep(2)
+    login_button = driver.find_element_by_id('loginbutton')
+    login_button.click()
+    time.sleep(5)
 
-do_later = driver.find_element_by_class_name('aOOlW.HoLwm ')
-do_later.click()
-time.sleep(2)
-
-word= '부산대톤쇼우'
-driver.get('https://www.instagram.com/explore/tags/'+word+'/')
-time.sleep(2)
+    do_later = driver.find_element_by_class_name('aOOlW.HoLwm ')
+    do_later.click()
+    time.sleep(1)
 
 def select_first(driver):
+    html = driver.page_source
+    bs = BeautifulSoup(html, 'lxml')
+    if len(bs.select('div._9AhH0')) == 0:
+        return 0
     first = driver.find_element_by_css_selector('div._9AhH0') 
     #find_element_by_css_selector 함수를 사용해 요소 찾기
     first.click()
@@ -72,38 +74,72 @@ def get_content(driver):
         place = soup.select('div.JF9hh')[0].text
     except:
         place = ''
-    data = [content, date, like, place, tags]
-    return data 
+    if 2015 <= int(date[:4]) <= 2020:
+            data = [content, date, like, place, tags]
+            return data
+    else:
+        return []
 
 def move_next(driver):
+    html = driver.page_source
+    bs = BeautifulSoup(html, 'lxml')
+    if len(bs.select('._65Bje.coreSpriteRightPaginationArrow')) == 0:
+        return 0
     right = driver.find_element_by_css_selector('._65Bje.coreSpriteRightPaginationArrow') 
     right.click()
     time.sleep(3)
 
-select_first(driver) 
+def make_pickle(name, data):
+    if len(data) == 0:
+        return 
+    with open(name+".pickle", 'wb') as fw:
+        pickle.dump(data, fw)
+
+def x_Btn(driver):
+    html = driver.page_source
+    bs = BeautifulSoup(html, 'lxml')
+    if len(bs.select("div.Igw0E.IwRSH.eGOV_._4EzTm.BI4qX.qJPeX.fm1AK.TxciK.yiMZG > button")) == 0:
+        return 0
+    driver.find_element_by_css_selector("div.Igw0E.IwRSH.eGOV_._4EzTm.BI4qX.qJPeX.fm1AK.TxciK.yiMZG > button").click()
+    time.sleep(1)
+
+driver = webdriver.Chrome('C:\WebDriver\chromedriver.exe')
+driver.get('https://www.instagram.com/')
+time.sleep(1)
+location_name = []
 result = []
-n = 1
-for i in range(20):
-    data = get_content(driver)
-    print(data)
-    result.append(data)
-    n += 1
+
+read_File("을지로.xlsx")
+instagramLogin(driver)
+for num in range(16, len(location_name)):
+    result = []
+    name = location_name[num].replace(" ", "")
+    driver.get('https://www.instagram.com/explore/tags/'+name+'/')
     time.sleep(2)
-    move_next(driver)
+    if select_first(driver) == 0:
+        continue
+    while True:
+        data = get_content(driver)
+        if len(data) == 0:
+            break
+        else:
+            result.append(data)
+        time.sleep(2)
+        if move_next(driver) == 0:
+            break
+    make_pickle(name ,result)
+    print(num, "번 성공")
+    if x_Btn(driver) == 0:
+        pass
 
-column = ['내용', '날짜', '좋아요', '장소', '해시태그'] #csv로 생성
-df = pd.DataFrame(result, columns = column)
-df.to_csv('톤쇼우.csv', columns = column, header = True)
 
-df = pd.read_csv('톤쇼우.csv')
-df
+# def read_pickle(filename):
+#     with open(filename, 'rb') as fr:
+#         data_1 = pickle.load(fr)
+#         return data_1
 
-with open('data.pickle', 'wb') as fw:
-    pickle.dump(result, fw)
-
-with open('data.pickle', 'rb') as fr:
-    data_1 = pickle.load(fr)
-    
-print(data_1)
-
-
+# def make_pickle(name, data):
+#     if len(data) == 0:
+#         return 
+#     with open(name+".pickle", 'wb') as fw:
+#         pickle.dump(data, fw)

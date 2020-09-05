@@ -11,6 +11,7 @@ def navermovie_star(request):
     qs = naver_movie.objects.all()
     qs.delete()
     result = crawling(1,2)
+    
     for i in result:
         i.save()
     print('성공')
@@ -73,4 +74,5 @@ def crawling(m, n ): # m이상 n 이하 페이지 출력
             writer = tds[2].select('a')[0].text
             qs = naver_movie(nickname=writer, score = point, movie_name= movie)
             result.append(qs)
+    print(result)
     return result

@@ -7,11 +7,21 @@ from bs4 import BeautifulSoup
 import re
 import pickle
 import openpyxl
+import csv
 
-apiKey = '5f4076c674c97ee9f612217f9e843f6c'
-word = "을지로3가 맛집"  
+apiKey = '5f4076c674c97ee9f612217f9e843f6c' 
+location_name = []
+
+road = ['청계천로','을지로9길','충무로9길','수표로','을지로11길','을지로13길','충무로13길','충무로','을지로15길','을지로17길','을지로','창경궁로5길',
+'창경궁로5나길','창경궁로5가길','창경궁로5다길','창경궁로7길','마른내로9길','마른내로','을지로22길','을지로18길','을지로20길','충무로4길','을지로16길',
+'을지로14길','충무로7길','을지로12길','삼일대로10길','삼일대로','을지로9길']
+category = [ '음식점',' 카페',' 디저트',' 편의점',' 은행',' 엔터테인먼트',' 모텔',' 마트',' 호텔',' 서점',' 시장',' 백화점',' 영화관',' 학교',' 헤어샵',
+' 주유소',' 약국',' 주차장',' 병원',' 치과',' 패스트푸드',' 일식',' 한식',' 중식',' 양식']
+
+for i in road:
+    for j in category:
+        location_name.append(i+j)
 location_Info = []
-
 
 def Coordinate_search(query):  #카카오맵에서 나온 주소를 좌표로
     url = "https://dapi.kakao.com/v2/local/search/address.json?page=1&size=10&query="+query
@@ -66,6 +76,14 @@ def location_search(keyword): #카카오맵에서 검색
     driver.find_element_by_id('search.keyword.submit').click()
     time.sleep(1)
 
+    html = driver.page_source
+    bs = BeautifulSoup(html, 'lxml')
+    if len(bs.select('#info\.search\.place\.list > li')) == 0:
+        return
+    elif 0 < len(bs.select('#info\.search\.place\.list > li')) < 16:
+        location(bs)
+        return
+    
     driver.find_element_by_css_selector('#info\.search\.place\.more').click()
     time.sleep(1)
 
@@ -81,17 +99,20 @@ def location_search(keyword): #카카오맵에서 검색
 
     loca_Info(driver)
 
-def csv(location_Info):  #csv파일로 변환
-    filename = 'kakao_location.xlsx'
-    column = ['이름', '주소', '리뷰건수','리뷰url','x좌표','y좌표']
+def make_xlsx(location_Info):  #csv파일로 변환
+    if len(location_Info) == 0:
+        return
+    filename = '을지로3,4가.xlsx'
+    # column = ['리뷰점수', '리뷰내용']
     wb = openpyxl.load_workbook(filename)
     ws = wb.active
-    sheet = wb.create_sheet(word)
-    ws = wb[word]
-    ws.append(column)
+    # ws.append(column)
     for review in location_Info:
         ws.append(review)
     wb.save(filename)
 
-location_search(word)
-csv(location_Info)
+for word in range(276, len(location_name)):
+    location_Info = []
+    location_search(location_name[word])
+    make_xlsx(location_Info)
+    print(word, '번 성공')

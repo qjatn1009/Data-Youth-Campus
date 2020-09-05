@@ -32,6 +32,7 @@ def student_search(request):
 
 def student_detail(request, name):
     qs = Students.objects.get(s_name = name)
+    print(qs)
     context = {'student_info': qs}
     return render(request, 'students/detail_student.html', context)
 
